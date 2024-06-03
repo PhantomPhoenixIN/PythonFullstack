@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.title }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .main-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+        .banner {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+        .content {
+            padding: 20px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            transition: box-shadow 0.3s;
+            border-left: 5px solid transparent; 
+            border-top: 2px solid rgba(0, 0, 0, 0.1); 
+            border-right: 2px solid rgba(0, 0, 0, 0.1); 
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1); 
+        }
+        .card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .text-content {
+            line-height: 1.6;
+            text-align: justify;
+        }
+        /* Custom border colors for different sections */
+        .introduction {
+            border-left-color: #1abc9c; /* Green */
+        }
+        .main-content {
+            border-left-color: #3498db; /* Blue */
+        }
+        .conclusion {
+            border-left-color: #e74c3c; /* Red */
+        }
+        .description {
+            border-left-color: #f39c12; /* Yellow */
+        }
+        /* Comments section */
+        .comments-card {
+            margin-top: 20px;
+        }
+        .comments-card .media {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .comments-card .media-body h5 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .comments-card .media-body p {
+            font-size: 16px;
+        }
+        .comments-card .media-body small {
+            color: #888;
+        }
+        .add-comment-form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .add-comment-form h5 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .add-comment-form form .form-control {
+            border-radius: 5px;
+        }
+        .add-comment-form form .btn-primary {
+            background-color: #3498db;
+            border-color: #3498db;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .add-comment-form form .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <div class="banner" style="background-image: url('{{ product.image.url }}');"></div>
+        <div class="content">
+            <div class="card">
+                <div class="title">{{ product.title }}</div>
+            </div>
+            <div class="card text-content introduction">
+                <div class="introduction">{{ product.introduction }}</div>
+            </div>
+            <div class="card text-content main-content">
+                <div class="main-content">{{ product.main_content|linebreaks }}</div>
+            </div>
+            <div class="card text-content conclusion">
+                <div class="conclusion">{{ product.conclusion }}</div>
+            </div>
+            <div class="card text-content description">
+                <div class="description">{{ product.description }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-card">
+        <div class="card comments-card">
+            <div class="card-body">
+                <h5 class="card-title">Comments</h5>
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="media mb-3">
+                            <div class="media-body">
+                                <h5 class="mt-0">{{ comment.author }}</h5>
+                                <p>{{ comment.text }}</p>
+                                <small>Posted on {{ comment.created_at }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No comments yet. Be the first to comment!</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card add-comment-form">
+            <div class="card-body">
+                <h5 class="card-title">Add a Comment</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Post Comment</button>
+                </form>
+            </div>
+        </div>
+        <a href="{% url 'product_list' %}" class="btn btn-secondary mt-3">Back to Home</a>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
